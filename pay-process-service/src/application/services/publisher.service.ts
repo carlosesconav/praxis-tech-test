@@ -1,18 +1,18 @@
 // src/serviceA.ts
 import { connectRabbitMQ } from "@/infrastructure/queue/rabbitmq.js";
 
-const EXCHANGE_NAME = "events";
+const QUEUE_NAME = "mi_cola"; // ← Nombre de la cola fija
 
 export async function emitEvent(message: string) {
-  const channel = await connectRabbitMQ(); // Channel
+  const channel = await connectRabbitMQ(); // Conexión / Channel
 
-  // Declarar exchange tipo fanout (pub/sub)
-  await channel.assertExchange(EXCHANGE_NAME, "fanout", { durable: false });
+  // Declarar la cola (asegurarnos que exista)
+  await channel.assertQueue(QUEUE_NAME, { durable: false });
 
-  // Publicar mensaje
-  channel.publish(EXCHANGE_NAME, "", Buffer.from(message));
-  console.log("Evento emitido:", message);
+  // Enviar mensaje directamente a la cola
+  channel.sendToQueue(QUEUE_NAME, Buffer.from(message));
 
-  // No cerramos la conexión si vamos a enviar más eventos
+  console.log("Mensaje enviado a la cola:", QUEUE_NAME, "->", message);
+
+  // No cerramos la conexión si vamos a enviar más mensajes
 }
-

@@ -20,7 +20,7 @@ const getAccountByNumber = async (accountNumber: string): Promise<AccountAttribu
 const createAccount = async (accountType: string, userId: string) => {
     
     const accountNumber: string = generateRandomNumber20();
-    await Account.create({
+    return await Account.create({
     accountNumber: accountNumber,
     accountType: accountType,
     balance: "0.0000", // saldo inicial bancario

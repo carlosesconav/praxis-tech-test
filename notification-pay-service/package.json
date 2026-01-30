@@ -1,0 +1,31 @@
+{
+  "name": "notification-pay-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+  "dev:api": "ts-node src/index.ts",
+  "dev:consumer": "ts-node src/consumer.ts",
+  "dev": "concurrently \"npm run dev:api\" \"npm run dev:consumer\"",
+  "build": "tsc",
+  "start:api": "node dist/index.js",
+  "start:consumer": "node dist/consumer.js",
+  "start": "concurrently \"npm run start:api\" \"npm run start:consumer\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/amqplib": "^0.10.8",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.1.0",
+    "concurrently": "^9.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.9",
+    "express": "^5.2.1"
+  }
+}

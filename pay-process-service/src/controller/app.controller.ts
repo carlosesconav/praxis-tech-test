@@ -1,6 +1,6 @@
 import { Router } from "express";
 import cors from "cors";
-import { transactionRequest } from "@/application/services/transaction.service.js";
+import { transactionRequest, rechargeAccount } from "@/application/services/transaction.service.js";
 import {
   createUser,
   getUserInfoByDocumentNumber,
@@ -92,6 +92,24 @@ route.post("/api/v1/account/create", async (req, res) => {
   }
 });
 
+route.post("/api/v1/account/recharge", async (req, res) => {
+  try {
+    const { accountNumber, accountType, newBalance } = req.body;
+
+    await rechargeAccount(accountNumber, accountType, newBalance);
+
+    return res.status(201).json({
+      status: 201,
+      message: "Successful transaction"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: `Failed operation ${error}`,
+    });
+  }
+});
+
 route.get("/api/v1/user", async (req, res) => {
   try {
     const docNumber = req.query.docNumber?.toString();
@@ -118,3 +136,5 @@ route.get("/api/v1/user", async (req, res) => {
     });
   }
 });
+
+export default route;
