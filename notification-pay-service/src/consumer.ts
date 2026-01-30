@@ -12,7 +12,7 @@ async function startConsumer() {
     // Asegurarnos de que la cola exista
     await channel.assertQueue(QUEUE_NAME, { durable: true });
 
-    console.log(`Esperando mensajes en la cola "${QUEUE_NAME}"...`);
+    console.log(`Waiting for messages in the queue "${QUEUE_NAME}"...`);
 
     // Consumir mensajes
     channel.consume(
@@ -21,6 +21,7 @@ async function startConsumer() {
         if (msg) {
           const contenido = msg.content.toString();
           console.log("Mensaje recibido:", contenido);
+          console.log(`email sent successfully!`);
 
           // Aquí puedes ejecutar la lógica que quieras al recibir el evento
 
@@ -28,7 +29,7 @@ async function startConsumer() {
           channel.ack(msg);
         }
       },
-      { noAck: false }
+      { noAck: false },
     );
   } catch (error) {
     console.error("Error en RabbitMQ:", error);

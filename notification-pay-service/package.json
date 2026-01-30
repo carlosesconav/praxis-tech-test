@@ -5,11 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "dev:api": "ts-node src/index.ts",
+  "dev:api": "ts-node src/consumer.ts",
   "dev:consumer": "ts-node src/consumer.ts",
   "dev": "concurrently \"npm run dev:api\" \"npm run dev:consumer\"",
   "build": "tsc",
-  "start:api": "node dist/index.js",
+  "start:api": "node dist/consumer.js",
   "start:consumer": "node dist/consumer.js",
   "start": "concurrently \"npm run start:api\" \"npm run start:consumer\""
   },
