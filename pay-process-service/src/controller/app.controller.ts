@@ -12,7 +12,8 @@ const route = Router();
 route.use(cors());
 
 route.post("/api/v1/transactionRequest", async (req, res) => {
-    let status = TransactionStatusEnum.SUCCESS;
+  let status = TransactionStatusEnum.SUCCESS;
+
   try {
     const {
       accountNumberOrigin,
@@ -35,16 +36,25 @@ route.post("/api/v1/transactionRequest", async (req, res) => {
       message: "Successful transaction",
       data: result,
     });
-  } catch (error) {
-    status = TransactionStatusEnum.REJECTED
+  } catch (error: any) {
+    status = TransactionStatusEnum.REJECTED;
+
+    console.error("Transaction failed:", error);
+
     return res.status(500).json({
       status: 500,
-      message: `Failed operation ${error}`,
+      message: `Failed operation: ${error instanceof Error ? error.message : error}`,
     });
   } finally {
-    emitEvent(`Operation result is completed; status: ${status}`);
+    // Manejar errores de emitEvent para que no rompa el servidor
+    try {
+      await emitEvent(`Operation result is completed; status: ${status}`);
+    } catch (eventError) {
+      console.error("Failed to emit event:", eventError);
+    }
   }
 });
+
 
 route.post("/api/v1/user/create", async (req, res) => {
   try {

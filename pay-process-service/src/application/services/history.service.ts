@@ -9,7 +9,8 @@ const createHistory = async (
   value: string,
   status: string
 ) => {
-  return await History.create({
+
+   const history = await History.create({
     userId: userId,
     accountId: accountId,
     transactionId: transactionId,
@@ -17,6 +18,7 @@ const createHistory = async (
     transactionValue: value,
     transactionStatus: status,
   });
+  return history
 };
 
 const getHistoryByTxId = async (txId: string) => {

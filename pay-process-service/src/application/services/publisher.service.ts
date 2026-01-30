@@ -7,7 +7,7 @@ export async function emitEvent(message: string) {
   const channel = await connectRabbitMQ(); // Conexión / Channel
 
   // Declarar la cola (asegurarnos que exista)
-  await channel.assertQueue(QUEUE_NAME, { durable: false });
+  await channel.assertQueue(QUEUE_NAME, { durable: true });
 
   // Enviar mensaje directamente a la cola
   channel.sendToQueue(QUEUE_NAME, Buffer.from(message));

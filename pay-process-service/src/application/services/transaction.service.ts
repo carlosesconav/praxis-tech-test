@@ -47,7 +47,7 @@ const transactionRequest = async (
 
   const result = await createHistory(originAccount.userId, originAccount.id, destinationAccount.id, txId, value, status);
 
-  return result.get();
+  return result;
 
 };
 
