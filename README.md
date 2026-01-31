@@ -12,8 +12,8 @@ Este proyecto contiene dos microservicios (`pay-process-service` y `notification
 
 ```
 .
-├── notification-pay-service/       # Microservicio de Pagos
-├── pay-process-service/        # Microservicio de Notificaciones
+├── pay-process-service/       # Microservicio de Pagos
+├── notification-pay-service/        # Microservicio de Notificaciones
 ├── docker-compose.yml
 └── README.md
 ```
