@@ -1,39 +1,53 @@
 import amqp from "amqplib";
-import 'dotenv/config';
+import "dotenv/config";
 
-const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@rabbitmq:5672"; // Cambia si tienes otro host
+const RABBITMQ_URL =
+  process.env.RABBITMQ_URL || "amqp://guest:guest@rabbitmq:5672";
 const QUEUE_NAME = "mi_cola";
 
+const RETRY_DELAY_MS = 5000; // tiempo entre intentos
+
 async function startConsumer() {
-  try {
-    // Conectar a RabbitMQ
-    const connection = await amqp.connect(RABBITMQ_URL);
-    const channel = await connection.createChannel();
+  while (true) {
+    try {
+      console.log("Intentando conectar a RabbitMQ...");
 
-    // Asegurarnos de que la cola exista
-    await channel.assertQueue(QUEUE_NAME, { durable: true });
+      // Conectar a RabbitMQ
+      const connection = await amqp.connect(RABBITMQ_URL);
+      const channel = await connection.createChannel();
 
-    console.log(`Waiting for messages in the queue "${QUEUE_NAME}"...`);
+      // Asegurarnos de que la cola exista
+      await channel.assertQueue(QUEUE_NAME, { durable: true });
 
-    // Consumir mensajes
-    channel.consume(
-      QUEUE_NAME,
-      (msg: any) => {
-        if (msg) {
-          const contenido = msg.content.toString();
-          console.log("Mensaje recibido:", contenido);
-          console.log(`email sent successfully!`);
+      console.log(`Conectado. Esperando mensajes en "${QUEUE_NAME}"...`);
 
-          // Aquí puedes ejecutar la lógica que quieras al recibir el evento
+      // Consumir mensajes
+      channel.consume(
+        QUEUE_NAME,
+        (msg: any) => {
+          if (msg) {
+            const contenido = msg.content.toString();
+            console.log("Mensaje recibido:", contenido);
+            console.log("email sent successfully!");
 
-          // Confirmar que el mensaje fue procesado
-          channel.ack(msg);
-        }
-      },
-      { noAck: false },
-    );
-  } catch (error) {
-    console.error("Error en RabbitMQ:", error);
+            // Confirmar que el mensaje fue procesado
+            channel.ack(msg);
+          }
+        },
+        { noAck: false },
+      );
+
+      // Si llega aquí, salimos del loop
+      break;
+    } catch (error) {
+      console.error(
+        "Error conectando a RabbitMQ. Reintentando en 5s...",
+        error,
+      );
+
+      // Esperar antes de reintentar
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+    }
   }
 }
 
