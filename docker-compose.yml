@@ -1,0 +1,58 @@
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+     test: ["CMD", "rabbitmqctl", "status"]
+     interval: 5s
+     timeout: 5s
+     retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: txtest
+    ports:
+      - "3306:3306"
+    healthcheck:
+     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  pay-process-service:
+    build:
+      context: ./pay-process-service
+    container_name: pay-process-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
+      - mysql
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_PORT: "3306"
+      SERVER_PORT: "3000"
+      DB_NAME: txtest
+
+  notification-pay-service:
+    build:
+      context: ./notification-pay-service
+    container_name: notification-pay-service
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+volumes:
+  mysql_data:

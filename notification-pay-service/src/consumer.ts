@@ -1,6 +1,7 @@
 import amqp from "amqplib";
+import 'dotenv/config';
 
-const RABBITMQ_URL = "amqp://localhost"; // Cambia si tienes otro host
+const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@rabbitmq:5672"; // Cambia si tienes otro host
 const QUEUE_NAME = "mi_cola";
 
 async function startConsumer() {

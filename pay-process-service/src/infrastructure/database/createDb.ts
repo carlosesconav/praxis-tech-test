@@ -1,9 +1,9 @@
 import mysql from "mysql2/promise";
 
-const dbPort: string = `${process.env.PUBLIC_DB_NAME}`;
-const dbUser: string = `${process.env.PRIVATE_DB_USER}`;
-const dbHost: string = `${process.env.PRIVATE_DB_HOST}`;
-const dbName: string = `${process.env.PUBLIC_DB_NAME}`;
+const dbPort: string = `${process.env.DB_PORT}`;
+const dbUser: string = `${process.env.DB_USER}`;
+const dbHost: string = `${process.env.DB_HOST}`;
+const dbName: string = `${process.env.DB_NAME}`;
 
 export const createDatabaseIfNotExist = async () => {
   const connection = await mysql.createConnection({

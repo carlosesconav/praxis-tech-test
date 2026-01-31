@@ -8,7 +8,7 @@ import { User } from "./domain/models/user.model.js";
 import { Account } from "./domain/models/account.model.js";
 import { History } from "./domain/models/history.model.js";
 
-const serverPort: string | undefined = process.env.PUBLIC_SERVER_PORT;
+const serverPort: string | undefined = process.env.SERVER_PORT;
 
 const main = async () => {
   try {

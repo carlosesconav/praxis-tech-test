@@ -5,13 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "dev:api": "ts-node src/consumer.ts",
-  "dev:consumer": "ts-node src/consumer.ts",
-  "dev": "concurrently \"npm run dev:api\" \"npm run dev:consumer\"",
-  "build": "tsc",
-  "start:api": "node dist/consumer.js",
-  "start:consumer": "node dist/consumer.js",
-  "start": "concurrently \"npm run start:api\" \"npm run start:consumer\""
+    "dev:api": "ts-node src/consumer.ts",
+    "dev:consumer": "ts-node src/consumer.ts",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:consumer\"",
+    "build": "tsc",
+    "start:api": "node dist/consumer.js",
+    "start:consumer": "node dist/consumer.js",
+    "start": "concurrently \"npm run start:api\" \"npm run start:consumer\""
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "amqplib": "^0.10.9",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1"
   }
 }

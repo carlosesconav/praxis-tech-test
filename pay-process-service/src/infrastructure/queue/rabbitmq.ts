@@ -7,7 +7,9 @@ type Channel = any;
 let connection: Connection;
 let channel: Channel;
 
-export async function connectRabbitMQ(url = "amqp://localhost"): Promise<Channel> {
+const urlRabbit = process.env.RABBITMQ_URL;
+
+export async function connectRabbitMQ(url = urlRabbit): Promise<Channel> {
   connection = await amqp.connect(url);   // Connection
   channel = await connection.createChannel(); // Channel
   return channel;
